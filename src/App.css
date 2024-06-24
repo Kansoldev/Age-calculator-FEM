@@ -112,18 +112,30 @@ body {
 
 .age-container {
   background-color: hsl(0, 0%, 100%);
-  width: 550px;
   border-radius: 20px;
   border-bottom-right-radius: 150px;
-  padding: 40px;
+  padding: 40px 20px;
   overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .age-container {
+    width: 550px;
+    padding: 40px;
+  }
 }
 
 .calculate-age-form {
   display: flex;
-  column-gap: 40px;
+  column-gap: 20px;
   padding-bottom: 10px;
   position: relative;
+}
+
+@media (min-width: 768px) {
+  .calculate-age-form {
+    column-gap: 40px;
+  }
 }
 
 .input-group {
@@ -165,7 +177,16 @@ body {
 #line {
   position: relative;
   border-top: 1px solid hsl(0, 0%, 86%);
-  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  margin-top: 45px;
+}
+
+@media (min-width: 768px) {
+  #line {
+    display: block;
+    margin-top: 20px;
+  }
 }
 
 #line::before {
@@ -175,13 +196,18 @@ body {
   align-items: center;
   position: absolute;
   top: -36px;
-  right: 0;
   background-color: hsl(259, 100%, 65%);
   padding-top: 6px;
   width: 70px;
   height: 70px;
   border-radius: 100%;
   cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  #line::before {
+    right: 0;
+  }
 }
 
 #result {
@@ -194,7 +220,13 @@ body {
 }
 
 #result h2 {
-  font-size: 4rem;
+  font-size: 3.5rem;
   font-style: italic;
   font-weight: 800;
+}
+
+@media (min-width: 768px) {
+  #result h2 {
+    font-size: 4rem;
+  }
 }
