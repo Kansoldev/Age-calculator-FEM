@@ -157,6 +157,7 @@ body {
   border: 1px solid hsl(0, 33%, 86%);
   border-radius: 7px;
   padding: 10px 15px;
+  font-weight: 700;
 }
 
 .submit-btn {
