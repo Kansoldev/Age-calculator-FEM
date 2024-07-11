@@ -204,6 +204,10 @@ body {
   cursor: pointer;
 }
 
+#line:hover::before {
+  background-color: hsl(0, 0%, 8%);
+}
+
 @media (min-width: 768px) {
   #line::before {
     right: 0;
