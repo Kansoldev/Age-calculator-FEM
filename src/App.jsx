@@ -13,7 +13,7 @@ const App = () => {
 
           <div className="input-group">
             <label htmlFor="month">Month</label>
-            <input type="text" id="day" placeholder="MM" />
+            <input type="text" id="month" placeholder="MM" />
           </div>
 
           <div className="input-group">
