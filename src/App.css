@@ -128,7 +128,7 @@ body {
 .calculate-age-form {
   display: flex;
   column-gap: 20px;
-  padding-bottom: 10px;
+  padding-bottom: 30px;
   position: relative;
 }
 
@@ -153,26 +153,41 @@ body {
 }
 
 .input-group input {
-  width: 90px;
+  width: 122px;
   border: 1px solid hsl(0, 33%, 86%);
   border-radius: 7px;
   padding: 10px 15px;
   font-weight: 700;
 }
 
+.input-group input.form-error {
+  border: 1px solid hsl(0, 100%, 67%);
+}
+
+.text-error {
+  color: hsl(0, 100%, 67%);
+}
+
+.button-container {
+  position: absolute;
+  bottom: 0;
+  top: 35px;
+  right: -30px;
+}
+
 .submit-btn {
   border: 0;
-  display: flex;
-  position: absolute;
   background-color: hsl(259, 100%, 65%);
   width: 70px;
-  justify-content: center;
-  align-items: center;
   height: 70px;
   border-radius: 100%;
-  margin-top: 20px;
+  margin-block: 40px;
   margin-left: auto;
   margin-right: 30px;
+}
+
+.submit-btn img {
+  margin: auto;
 }
 
 #line {
