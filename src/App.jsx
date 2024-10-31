@@ -52,9 +52,9 @@ const App = () => {
     e.preventDefault();
 
     const { day, month, year } = formValues;
-    const dayError = validateFormFields("day", day, 31);
-    const monthError = validateFormFields("month", month, 12);
-    const yearError =
+    const dayErr = validateFormFields("day", day, 31);
+    const monthErr = validateFormFields("month", month, 12);
+    const yearErr =
       year == ""
         ? "This field is required"
         : isNaN(year) || year > currentYear
@@ -64,163 +64,151 @@ const App = () => {
     setFormErrors((prevState) => {
       const newFormErrors = {
         ...prevState,
-        dayErr: dayError,
-        monthErr: monthError,
-        yearErr: yearError,
+        dayErr,
+        monthErr,
+        yearErr,
       };
 
       return newFormErrors;
     });
 
-    if (dayError == "" && monthError == "" && yearError == "") {
+    // Validate the date if there are no errors
+    if (dayErr === "" && monthErr === "" && yearErr === "") {
+      let noOfMonths = 0;
+      let noOfDays = 0;
+      const currentDate = dayjs();
       const inputDate = dayjs(`${year}-${month}-${day}`);
-      const checkValidDate = dayjs(inputDate, "YYYY-MM-DD", true).isValid();
+      const checkValidDate = dayjs(
+        `${year}-${month}-${day}`,
+        "YYYY-MM-DD",
+        true
+      ).isValid();
 
       if (!checkValidDate) {
-        console.log("invalid date");
-      } else {
-        const currentDate = dayjs(new Date());
-        const dayDiff = currentDate.diff(inputDate, "day");
-        const monthDiff = currentDate.diff(inputDate, "month");
-        const yearDiff = currentDate.diff(inputDate, "year");
-
-        setOutput((prevState) => {
-          const newOutput = {
+        setFormErrors((prevState) => {
+          const newFormErrors = {
             ...prevState,
-            day: dayDiff,
-            month: monthDiff,
-            year: yearDiff,
+            dayErr: "Date is invalid",
           };
 
-          return newOutput;
+          return newFormErrors;
         });
 
-        console.log({
+        return false;
+      }
+
+      if (inputDate.month() > currentDate.month()) {
+        noOfMonths = 12 - (inputDate.month() - currentDate.month());
+      } else {
+        noOfMonths = inputDate.month() - currentDate.month();
+      }
+
+      if (inputDate.date() > currentDate.date()) {
+        noOfDays =
+          inputDate.daysInMonth() - inputDate.date() + currentDate.date();
+      } else {
+        noOfDays = inputDate.date() - currentDate.date();
+      }
+
+      const yearDiff = Math.abs(inputDate.diff(currentDate, "year"));
+      const monthDiff = Math.abs(noOfMonths);
+      const dayDiff = Math.abs(noOfDays);
+
+      setOutput((prevState) => {
+        const newOutput = {
+          ...prevState,
           day: dayDiff,
           month: monthDiff,
           year: yearDiff,
-        });
-      }
+        };
+
+        return newOutput;
+      });
     }
   }
 
   return (
     <>
-      <div className="age-container">
-        <form onSubmit={handleSubmit} className="calculate-age-form">
-          <div className="input-group">
-            <label
-              htmlFor="day"
-              className={formErrors.dayErr ? "text-error" : ""}
-            >
-              Day
-            </label>
+      <main className="age-container">
+        <form onSubmit={handleSubmit}>
+          <div className="form-container">
+            <div className="input-group">
+              <label
+                htmlFor="day"
+                className={formErrors.dayErr ? "text-error" : ""}
+              >
+                Day
+              </label>
 
-            <input
-              type="text"
-              id="day"
-              className={formErrors.dayErr ? "form-error" : ""}
-              name="day"
-              value={formValues.dayErr}
-              onChange={handleFormValues}
-              placeholder="DD"
-              maxLength={2}
-              inputMode="numeric"
-            />
+              <input
+                type="text"
+                id="day"
+                className={formErrors.dayErr ? "input-error" : ""}
+                name="day"
+                value={formValues.dayErr}
+                onChange={handleFormValues}
+                placeholder="DD"
+              />
 
-            <span
-              style={{
-                fontSize: 12,
-                fontStyle: "italic",
-                display: "inline-block",
-                marginTop: 8,
-                color: "hsl(0, 100%, 67%)",
-                fontWeight: 500,
-              }}
-            >
-              {formErrors.dayErr}
-            </span>
+              <span>{formErrors.dayErr}</span>
+            </div>
+
+            <div className="input-group">
+              <label
+                htmlFor="month"
+                className={formErrors.monthErr ? "text-error" : ""}
+              >
+                Month
+              </label>
+
+              <input
+                type="text"
+                id="month"
+                className={formErrors.monthErr ? "input-error" : ""}
+                name="month"
+                value={formValues.month}
+                onChange={handleFormValues}
+                placeholder="MM"
+              />
+
+              <span>{formErrors.monthErr}</span>
+            </div>
+
+            <div className="input-group">
+              <label
+                htmlFor="year"
+                className={formErrors.yearErr ? "text-error" : ""}
+              >
+                Year
+              </label>
+
+              <input
+                type="text"
+                id="year"
+                className={formErrors.yearErr ? "input-error" : ""}
+                name="year"
+                value={formValues.yearErr}
+                onChange={handleFormValues}
+                placeholder="YYYY"
+              />
+
+              <span>{formErrors.yearErr}</span>
+            </div>
           </div>
 
-          <div className="input-group">
-            <label
-              htmlFor="month"
-              className={formErrors.monthErr ? "text-error" : ""}
-            >
-              Month
-            </label>
-
-            <input
-              type="text"
-              id="month"
-              className={formErrors.monthErr ? "form-error" : ""}
-              name="month"
-              value={formValues.month}
-              onChange={handleFormValues}
-              placeholder="MM"
-            />
-
-            <span
-              style={{
-                fontSize: 12,
-                fontStyle: "italic",
-                display: "inline-block",
-                marginTop: 8,
-                color: "hsl(0, 100%, 67%)",
-                fontWeight: 500,
-              }}
-            >
-              {formErrors.monthErr}
-            </span>
-          </div>
-
-          <div className="input-group">
-            <label
-              htmlFor="year"
-              className={formErrors.yearErr ? "text-error" : ""}
-            >
-              Year
-            </label>
-
-            <input
-              type="text"
-              id="year"
-              className={formErrors.yearErr ? "form-error" : ""}
-              name="year"
-              value={formValues.yearErr}
-              onChange={handleFormValues}
-              placeholder="YYYY"
-            />
-
-            <span
-              style={{
-                fontSize: 12,
-                fontStyle: "italic",
-                display: "inline-block",
-                marginTop: 8,
-                color: "hsl(0, 100%, 67%)",
-                fontWeight: 500,
-              }}
-            >
-              {formErrors.yearErr}
-            </span>
-          </div>
-
-          <div className="button-container" style={{ marginTop: 20 }}>
-            <button className="submit-btn" style={{ cursor: "pointer" }}>
+          <div className="button-container">
+            <button type="submit" className="submit-btn">
               <img src={image} alt="" />
             </button>
           </div>
         </form>
-
-        {/* <div id="line"></div> */}
 
         <div id="result">
           <h2>
             <span>{output.year}</span> years
           </h2>
 
-          <h2 style={{ marginBlock: "20px" }}>
+          <h2>
             <span>{output.month}</span> months
           </h2>
 
@@ -228,7 +216,7 @@ const App = () => {
             <span>{output.day}</span> days
           </h2>
         </div>
-      </div>
+      </main>
     </>
   );
 };
